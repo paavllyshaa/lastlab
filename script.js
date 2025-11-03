@@ -1,21 +1,20 @@
 class SPAApplication {
     constructor() {
         this.apiService = new ApiService();
+        this.userStorage = new UserStorage(); 
         this.router = new SPARouter();
         this.breadcrumbs = new Breadcrumbs();
-        this.userList = new UserList(this.apiService);
-        this.todoList = new TodoList(this.apiService); 
-        this.postList = new PostList(this.apiService);  
+        this.userList = new UserList(this.apiService, this.userStorage);  
+        this.todoList = new TodoList(this.apiService);
+        this.postList = new PostList(this.apiService);
+        this.commentList = new CommentList(this.apiService);  
         this.searchTerm = '';
         this.currentScreen = 'users';
+        this.currentPostId = null;  
         
         window.app = this;
         
         this.init();
-    }
-    init() {
-        this.render();
-        console.log('SPA приложение инициализировано!');
     }
     onRouteChange(path) {
         this.currentScreen = path;
@@ -57,18 +56,18 @@ class SPAApplication {
         let content = '';
         
         try {
-            switch(path) {
+           switch(path) {
     case 'users':
         content = await this.userList.render(this.searchTerm);
         break;
     case 'users#todos':
-        content = await this.todoList.render(this.searchTerm); 
+        content = await this.todoList.render(this.searchTerm);
         break;
     case 'users#posts':
-        content = await this.postList.render(this.searchTerm);  
+        content = await this.postList.render(this.searchTerm);
         break;
     case 'users#posts#comments':
-        content = '<div class="screen-header"><h2>💬 Комментарии к постам</h2></div><p>Компонент комментариев в разработке...</p>';
+        content = await this.commentList.render(this.searchTerm, this.currentPostId);
         break;
     default:
         content = `
@@ -110,21 +109,61 @@ class SPAApplication {
         this.router.navigateTo('users#posts');
     }
     
+    retryLoading() {
+        this.render();
+    }
+        // Новые методы для работы с пользователями и комментариями
+    showAddUserForm() {
+        const name = prompt('Введите имя пользователя:');
+        if (!name) return;
+        
+        const email = prompt('Введите email пользователя:');
+        if (!email) return;
+        
+        const company = prompt('Введите название компании:') || 'Не указано';
+        const phone = prompt('Введите телефон:') || 'Не указан';
+        const website = prompt('Введите веб-сайт:') || 'Не указан';
+        const city = prompt('Введите город:') || 'Не указан';
+        const street = prompt('Введите улицу:') || 'Не указана';
+        
+        const newUser = this.userStorage.addUser({
+            name,
+            email,
+            company,
+            phone,
+            website,
+            city,
+            street
+        });
+        
+        this.render();
+        alert(`✅ Пользователь "${newUser.name}" успешно добавлен!`);
+    }
+    
+    deleteUser(userId) {
+        if (confirm(`Вы уверены, что хотите удалить этого пользователя?`)) {
+            this.userStorage.deleteUser(userId);
+            this.render();
+            alert('Пользователь успешно удален!');
+        }
+    }
+    
     showPostComments(postId) {
+        this.currentPostId = postId;
         this.router.navigateTo('users#posts#comments');
     }
     
-    showAddUserForm() {
-        alert('📝 Форма добавления пользователя еще не реализована!');
-    }
-    
-    retryLoading() {
-        this.render();
+    showPost(postId) {
+        this.commentList.resetPostFilter();
+        this.currentPostId = null;
+        this.router.navigateTo('users#posts');
+        alert(`Переход к посту #${postId} (функциональность скролла будет добавлена)`);
     }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
     new SPAApplication();
 });
+
 
 
