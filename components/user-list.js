@@ -1,12 +1,14 @@
 class UserList {
-    constructor(apiService) {
+    constructor(apiService, userStorage) {
         this.apiService = apiService;
+        this.userStorage = userStorage;
         this.users = [];
     }
     
     async render(searchTerm = '') {
         try {
-            this.users = await this.apiService.getUsers();
+            const apiUsers = await this.apiService.getUsers();
+            this.users = this.userStorage.getAllUsers(apiUsers);
             
             const filteredUsers = this.users.filter(user => 
                 user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -25,10 +27,12 @@ class UserList {
                 html += `<div class="no-data">Пользователи не найдены</div>`;
             } else {
                 filteredUsers.forEach(user => {
+                    const isCustom = this.userStorage.isCustomUser(user.id);
+                    
                     html += `
-                        <div class="user-card">
+                        <div class="user-card ${isCustom ? 'custom-user' : ''}">
                             <div class="user-header">
-                                <h3 class="user-name">${user.name}</h3>
+                                <h3 class="user-name">${user.name} ${isCustom ? '👤' : ''}</h3>
                                 <span class="user-id">#${user.id}</span>
                             </div>
                             <div class="user-info">
@@ -47,6 +51,11 @@ class UserList {
                                 <button class="btn-action" onclick="app.showUserPosts(${user.id})" title="Посты">
                                     📝 Посты
                                 </button>
+                                ${isCustom ? `
+                                    <button class="btn-danger" onclick="app.deleteUser(${user.id})" title="Удалить пользователя">
+                                        🗑️ Удалить
+                                    </button>
+                                ` : ''}
                             </div>
                         </div>
                     `;
@@ -61,7 +70,7 @@ class UserList {
                 <div class="error">
                     <h3>⚠️ Ошибка загрузки пользователей</h3>
                     <p>${error.message}</p>
-                    <button onclick="app.retryLoading()">Повторить попытку</button>
+                    <button class="btn btn-primary" onclick="app.retryLoading()">Повторить попытку</button>
                 </div>
             `;
         }
