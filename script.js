@@ -4,6 +4,8 @@ class SPAApplication {
         this.router = new SPARouter();
         this.breadcrumbs = new Breadcrumbs();
         this.userList = new UserList(this.apiService);
+        this.todoList = new TodoList(this.apiService); 
+        this.postList = new PostList(this.apiService);  
         this.searchTerm = '';
         this.currentScreen = 'users';
         
@@ -11,7 +13,6 @@ class SPAApplication {
         
         this.init();
     }
-    
     init() {
         this.render();
         console.log('SPA приложение инициализировано!');
@@ -125,3 +126,4 @@ class SPAApplication {
 document.addEventListener('DOMContentLoaded', () => {
     new SPAApplication();
 });
+
