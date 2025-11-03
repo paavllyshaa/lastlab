@@ -6,11 +6,120 @@
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f4f4f4;
+    line-height: 1.6;
+    color: #333;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
 }
 
 .container {
     max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
+}
+
+.header {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    color: #2c3e50;
+    padding: 1.5rem 0;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 0 0 15px 15px;
+}
+
+.search-box {
+    margin: 25px 0;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.search-box input {
+    width: 100%;
+    padding: 12px 20px;
+    border: 2px solid #e1e8ed;
+    border-radius: 25px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    background: white;
+}
+
+.search-box input:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+}
+
+.breadcrumbs {
+    background: rgba(255, 255, 255, 0.9);
+    padding: 15px 20px;
+    border-radius: 10px;
+    margin: 20px 0;
+    font-size: 16px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+}
+
+.breadcrumb-link {
+    color: #3498db;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.breadcrumb-link:hover {
+    color: #2980b9;
+    text-decoration: underline;
+}
+
+.breadcrumb-current {
+    color: #2c3e50;
+    font-weight: 600;
+}
+
+.screen-container {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 15px;
+    padding: 30px;
+    margin-top: 20px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.loading {
+    text-align: center;
+    padding: 40px;
+    font-size: 18px;
+    color: #666;
+}
+
+.error {
+    background: #e74c3c;
+    color: white;
+    padding: 15px;
+    border-radius: 8px;
+    margin: 10px 0;
+    text-align: center;
+}
+
+.hidden {
+    display: none;
+}
+@media (max-width: 768px) {
+    .container {
+        padding: 10px;
+    }
+    
+    .screen-container {
+        padding: 20px;
+    }
+    
+    .header {
+        padding: 1rem 0;
+    }
 }
