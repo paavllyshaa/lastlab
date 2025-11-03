@@ -58,27 +58,27 @@ class SPAApplication {
         
         try {
             switch(path) {
-                case 'users':
-                    content = await this.userList.render(this.searchTerm);
-                    break;
-                case 'users#todos':
-                    content = '<div class="screen-header"><h2>✅ Задачи пользователей</h2></div><p>Компонент задач в разработке...</p>';
-                    break;
-                case 'users#posts':
-                    content = '<div class="screen-header"><h2>📝 Посты пользователей</h2></div><p>Компонент постов в разработке...</p>';
-                    break;
-                case 'users#posts#comments':
-                    content = '<div class="screen-header"><h2>💬 Комментарии к постам</h2></div><p>Компонент комментариев в разработке...</p>';
-                    break;
-                default:
-                    content = `
-                        <div class="error">
-                            <h2>404 - Страница не найдена</h2>
-                            <p>Маршрут "${path}" не существует.</p>
-                            <button class="btn btn-primary" onclick="app.router.navigateTo('users')">Вернуться к пользователям</button>
-                        </div>
-                    `;
-            }
+    case 'users':
+        content = await this.userList.render(this.searchTerm);
+        break;
+    case 'users#todos':
+        content = await this.todoList.render(this.searchTerm); 
+        break;
+    case 'users#posts':
+        content = await this.postList.render(this.searchTerm);  
+        break;
+    case 'users#posts#comments':
+        content = '<div class="screen-header"><h2>💬 Комментарии к постам</h2></div><p>Компонент комментариев в разработке...</p>';
+        break;
+    default:
+        content = `
+            <div class="error">
+                <h2>404 - Страница не найдена</h2>
+                <p>Маршрут "${path}" не существует.</p>
+                <button class="btn btn-primary" onclick="app.router.navigateTo('users')">Вернуться к пользователям</button>
+            </div>
+        `;
+}
         } catch (error) {
             content = `
                 <div class="error">
@@ -126,4 +126,5 @@ class SPAApplication {
 document.addEventListener('DOMContentLoaded', () => {
     new SPAApplication();
 });
+
 
